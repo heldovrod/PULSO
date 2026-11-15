@@ -134,6 +134,15 @@ div[data-testid="stAlert"] {
     border-left-width: 6px;
     padding: 10px 14px;
     font-size: 0.9rem;
+    /* 💡 NUEVO: Forzamos fondo blanco y borde gris suave */
+    background-color: #FFFFFF !important;
+    border: 1px solid #D1D5DB !important;
+}
+
+/* 💡 NUEVO: Forzamos que el texto de las alertas sea siempre oscuro (Modo Claro) */
+div[data-testid="stAlert"] p, 
+div[data-testid="stAlert"] span {
+    color: #1E1E1E !important;
 }
 
 /* =========================================
@@ -160,7 +169,6 @@ div[data-testid="stHorizontalBlock"] > div:nth-child(2) div[data-testid="stVerti
    BOTÓN TERCIARIO COMO ENLACE DE TEXTO 
    ========================================= */
 
-/* 1. Apuntamos al botón usando el data-testid moderno de Streamlit */
 [data-testid="stBaseButton-tertiary"] {
     background-color: transparent !important;
     border: none !important;
@@ -169,7 +177,6 @@ div[data-testid="stHorizontalBlock"] > div:nth-child(2) div[data-testid="stVerti
     text-align: left !important;
     transition: color 0.2s ease;
 }
-
 
 [data-testid="stBaseButton-tertiary"] p, 
 [data-testid="stBaseButton-tertiary"] span,
@@ -181,7 +188,6 @@ div[data-testid="stHorizontalBlock"] > div:nth-child(2) div[data-testid="stVerti
     margin-bottom: 0 !important;
 }
 
-/* 3. Efecto al pasar el ratón */
 [data-testid="stBaseButton-tertiary"]:hover p,
 [data-testid="stBaseButton-tertiary"]:hover span,
 [data-testid="stBaseButton-tertiary"]:hover div {
@@ -193,19 +199,24 @@ div[data-testid="stHorizontalBlock"] > div:nth-child(2) div[data-testid="stVerti
    CORRECCIÓN DE INPUTS EN LA BARRA LATERAL
    ========================================= */
 
-/* 1. Forzar que el texto que escribe el usuario sea oscuro */
 [data-testid="stSidebar"] input {
     color: #333333 !important; 
-    -webkit-text-fill-color: #333333 !important; /* Arreglo para navegadores basados en Chrome/Edge */
+    -webkit-text-fill-color: #333333 !important; 
 }
 
-/* 2. Poner el texto de fondo (placeholder) en gris suave */
 [data-testid="stSidebar"] input::placeholder {
     color: #9CA3AF !important; 
     opacity: 1 !important;
 }
 
-/* 3. Ocultar el texto "Press Enter to apply" para que quede más limpio */
 [data-testid="stSidebar"] [data-testid="InputInstructions"] {
     display: none !important;
+}
+
+/* =========================================
+   FORZAR MODO CLARO (Evitar que se ponga oscuro en la nube)
+   ========================================= */
+.stApp {
+    background-color: #F5F7FA !important;
+    color: #1E1E1E !important;
 }

@@ -41,7 +41,61 @@ if datos_evaluados is None:
     st.error("No se encontraron los datos. Ejecuta 'python scripts/generate_dataset.py' primero.")
     st.stop()
 
-# 2. SIMULACIÓN DE LA AGENDA
+# 💡 NUEVO: BUSCADOR EN LA PANTALLA PRINCIPAL
+st.markdown("---")
+busqueda = st.text_input("🔍 Buscador rápido: Introduce nombre o CIP para buscar en todo el cupo...", "")
+
+if busqueda:
+    resultados_busqueda = [
+        item for item in datos_evaluados 
+        if busqueda.lower() in item["paciente"].nombre.lower() or busqueda.lower() in item["paciente"].id.lower()
+    ]
+    
+    if not resultados_busqueda:
+        st.warning(f"No se han encontrado pacientes que coincidan con '{busqueda}'.")
+    else:
+        st.write(f"### Resultados de la búsqueda ({len(resultados_busqueda)})")
+        
+        for item in resultados_busqueda[:15]: # Límite visual de 15
+            p = item["paciente"]
+            r = item["resultado"]
+            alertas_ord = sorted(r["alertas"], key=lambda x: {"Grave":3, "Moderado":2, "Leve":1}.get(x["nivel"], 0), reverse=True)
+            
+            with st.container(border=True):
+                c_info, c_alertas, c_botones = st.columns([3, 5, 1.2], vertical_alignment="center")
+                
+                with c_info:
+                    st.markdown(f"**{p.nombre}**")
+                    st.caption(f"{p.edad} años | {p.id}")
+                    
+                    if r["categoria"] == "Muy alto":
+                        st.markdown(":red-background[**Riesgo Muy alto**]")
+                    elif r["categoria"] == "Alto":
+                        st.markdown(":orange-background[**Riesgo Alto**]")
+                    elif r["categoria"] == "Moderado":
+                        st.markdown(":yellow-background[**Riesgo Moderado**]")
+                    
+                with c_alertas:
+                    if not alertas_ord:
+                        st.success("Sin alertas relevantes", icon=":material/check_circle:")
+                    else:
+                        alerta_top = alertas_ord[0]
+                        if alerta_top["nivel"] == "Grave":
+                            st.error(f"**{alerta_top['tipo']}:** {alerta_top['texto']}", icon=":material/error:")
+                        elif alerta_top["nivel"] == "Moderado":
+                            st.warning(f"**{alerta_top['tipo']}:** {alerta_top['texto']}", icon=":material/warning:")
+                        else:
+                            st.info(f"**{alerta_top['tipo']}:** {alerta_top['texto']}", icon=":material/info:")
+                            
+                with c_botones:
+                    if st.button("Abrir Ficha", key=f"search_btn_{p.id}", type="primary", use_container_width=True):
+                        st.session_state.paciente_seleccionado = p.id
+                        st.switch_page("views/5_FichaPaciente.py")
+    
+    # Si estamos buscando, ocultamos la agenda normal para que no haya conflicto visual
+    st.stop()
+
+# 2. SIMULACIÓN DE LA AGENDA (Si no hay búsqueda activa)
 pacientes_citados = datos_evaluados[:12]
 
 hora_inicio = datetime(2026, 11, 14, 8, 30)
@@ -52,7 +106,7 @@ for i, item in enumerate(pacientes_citados):
 
 citas_hoy.sort(key=lambda x: x["hora"])
 
-# 3. INTERFAZ VISUAL
+# 3. INTERFAZ VISUAL DE LA AGENDA
 col_agenda, col_resumen = st.columns([4.5, 1.2])
 
 with col_agenda:

@@ -1,0 +1,211 @@
+/* =========================================
+   ESTILO GLOBAL CARDIO-PREVENT (e-CAP / Sanidad)
+   ========================================= */
+
+/* 1. Tipografía y Fondo general */
+html, body, [class*="css"] {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #333333;
+}
+
+.stApp {
+    background-color: #F5F7FA; /* Gris muy claro institucional */
+}
+
+/* Ocultar menús nativos de Streamlit para que parezca app de escritorio */
+#MainMenu {visibility: hidden;}
+.stDeployButton {display: none;}
+footer {visibility: hidden;}
+
+/* =========================================
+   MENÚ LATERAL (SIDEBAR)
+   ========================================= */
+[data-testid="stSidebar"] {
+    background-color: #0A4A7A; /* Azul institucional */
+    min-width: 300px !important;
+    max-width: 300px !important;
+}
+
+/* Forzar texto claro en el menú */
+[data-testid="stSidebar"] * {
+    color: #E2E8F0 !important;
+}
+
+/* Enlaces de navegación */
+[data-testid="stSidebarNav"] a {
+    padding: 10px 16px;
+    margin: 4px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+[data-testid="stSidebarNav"] a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF !important;
+}
+
+[data-testid="stSidebarNav"] a[aria-current="page"] {
+    background-color: #005B8F !important;
+    color: #FFFFFF !important;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Tarjeta de perfil de la médica */
+.user-profile-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+    background-color: #083B61;
+    padding: 15px 20px;
+    border-top: 1px solid #0A4A7A;
+    z-index: 999;
+}
+
+/* Espacio para que el menú no quede tapado por el perfil */
+[data-testid="stSidebarNav"] {
+    padding-bottom: 100px !important;
+}
+
+/* =========================================
+   TARJETAS Y CONTENEDORES
+   ========================================= */
+div[data-testid="stVerticalBlockBorderWrapper"] {
+    background-color: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    padding: 12px 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* =========================================
+   MÉTRICAS (Datos clínicos)
+   ========================================= */
+div[data-testid="stMetricValue"] {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #003366;
+}
+
+div[data-testid="stMetricLabel"] {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4B5563;
+    text-transform: uppercase;
+}
+
+/* =========================================
+   BOTONES
+   ========================================= */
+.stButton > button {
+    border-radius: 6px;
+    font-weight: 600;
+    border: 1px solid #003366;
+}
+
+.stButton > button[kind="primary"] {
+    background-color: #003366;
+    color: #FFFFFF;
+}
+
+.stButton > button[kind="primary"]:hover {
+    background-color: #005B8F;
+    color: #FFFFFF;
+}
+
+.stButton > button[kind="secondary"] {
+    background-color: #FFFFFF;
+    color: #003366;
+}
+
+.stButton > button[kind="secondary"]:hover {
+    background-color: #F3F4F6;
+}
+
+/* =========================================
+   ALERTAS (st.error, st.warning, st.info)
+   ========================================= */
+div[data-testid="stAlert"] {
+    border-radius: 4px;
+    border-left-width: 6px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+}
+
+/* =========================================
+   PESTAÑAS (Tabs)
+   ========================================= */
+button[data-baseweb="tab"] {
+    font-weight: 600;
+    color: #4B5563;
+    font-size: 1rem;
+}
+
+button[data-baseweb="tab"][aria-selected="true"] {
+    color: #003366;
+    border-bottom: 3px solid #003366;
+}
+
+/* Fuerza a que los contenedores con borde en columnas no se estiren hacia abajo */
+div[data-testid="stHorizontalBlock"] > div:nth-child(2) div[data-testid="stVerticalBlockBorderWrapper"] {
+    height: fit-content !important;
+    align-self: flex-start !important;
+}
+
+/* =========================================
+   BOTÓN TERCIARIO COMO ENLACE DE TEXTO 
+   ========================================= */
+
+/* 1. Apuntamos al botón usando el data-testid moderno de Streamlit */
+[data-testid="stBaseButton-tertiary"] {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    text-align: left !important;
+    transition: color 0.2s ease;
+}
+
+
+[data-testid="stBaseButton-tertiary"] p, 
+[data-testid="stBaseButton-tertiary"] span,
+[data-testid="stBaseButton-tertiary"] div {
+    font-size: 1.2rem !important; 
+    font-weight: 600 !important;
+    color: #005B8F !important; /* Azul institucional */
+    text-align: left !important;
+    margin-bottom: 0 !important;
+}
+
+/* 3. Efecto al pasar el ratón */
+[data-testid="stBaseButton-tertiary"]:hover p,
+[data-testid="stBaseButton-tertiary"]:hover span,
+[data-testid="stBaseButton-tertiary"]:hover div {
+    text-decoration: underline !important;
+    color: #003366 !important;
+}
+
+/* =========================================
+   CORRECCIÓN DE INPUTS EN LA BARRA LATERAL
+   ========================================= */
+
+/* 1. Forzar que el texto que escribe el usuario sea oscuro */
+[data-testid="stSidebar"] input {
+    color: #333333 !important; 
+    -webkit-text-fill-color: #333333 !important; /* Arreglo para navegadores basados en Chrome/Edge */
+}
+
+/* 2. Poner el texto de fondo (placeholder) en gris suave */
+[data-testid="stSidebar"] input::placeholder {
+    color: #9CA3AF !important; 
+    opacity: 1 !important;
+}
+
+/* 3. Ocultar el texto "Press Enter to apply" para que quede más limpio */
+[data-testid="stSidebar"] [data-testid="InputInstructions"] {
+    display: none !important;
+}

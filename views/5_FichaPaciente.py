@@ -41,7 +41,6 @@ def mostrar_ficha(paciente, resultado_motor):
             st.markdown(f":green[**SCORE DE RIESGO: {score} / 100**] &nbsp;·&nbsp; Paciente controlado")
         
     with col2:
-        # 💡 Acortamos el texto a "RIESGO CV" para que no se corte
         st.metric(
             label="RIESGO CV", 
             value=resultado_motor["categoria"], 
@@ -63,22 +62,40 @@ def mostrar_ficha(paciente, resultado_motor):
     
     # --- PESTAÑA 1: RESUMEN CLÍNICO ---
     with tab1:
-        st.subheader("Resumen Ejecutivo y Bloques")
-        
         # Fila 1: PA, eGFR, IMC
         c1, c2, c3 = st.columns(3)
+        
+        # Comentario visual en la PA (Muestra si es Normal, HTA grado I, II...)
         with c1:
             tomas = paciente.get('pa_tomas', [])
             ultima_pa = f"{tomas[-1][0]}/{tomas[-1][1]} mmHg" if tomas else "Sin datos"
-            st.container(border=True).metric(label="PRESIÓN ARTERIAL (PA)", value=ultima_pa, help=f"Nivel detectado: {resultado_motor['niveles'].get('PA', 'Desconocido')}")
+            nivel_pa = resultado_motor['niveles'].get('PA', 'Desconocido')
+            st.container(border=True).metric(
+                label="PRESIÓN ARTERIAL (PA)", 
+                value=ultima_pa,
+                delta=nivel_pa,
+                delta_color="inverse" if "Normal" not in nivel_pa and "Óptima" not in nivel_pa else "normal"
+            )
+            
         with c2:
             egfr = paciente.get('egfr')
-            st.container(border=True).metric(label="FUNCIÓN RENAL (eGFR)", value=f"{egfr} mL/min" if egfr is not None else "Sin datos")
+            st.container(border=True).metric(
+                label="FUNCIÓN RENAL (eGFR)", 
+                value=f"{egfr} mL/min" if egfr is not None else "Sin datos"
+            )
+            
+        # Comentario visual en el IMC (Muestra si es Normopeso, Sobrepeso u Obesidad)
         with c3:
             peso, talla = paciente.get("peso"), paciente.get("talla")
             if peso and talla:
                 imc = round(peso / (talla ** 2), 1)
-                st.container(border=True).metric(label="COMPOSICIÓN CORPORAL", value=f"{imc} IMC", help=f"Peso: {peso} kg | Talla: {talla} m")
+                cat_imc = "Obesidad" if imc >= 30 else ("Sobrepeso" if imc >= 25 else "Normopeso")
+                st.container(border=True).metric(
+                    label="COMPOSICIÓN CORPORAL", 
+                    value=f"{imc} IMC",
+                    delta=cat_imc,
+                    delta_color="inverse" if cat_imc != "Normopeso" else "normal"
+                )
             else:
                 st.container(border=True).metric(label="COMPOSICIÓN CORPORAL", value="Sin datos")
 
@@ -111,9 +128,8 @@ def mostrar_ficha(paciente, resultado_motor):
                 else:
                     st.info(f"**{alerta['tipo']}:** {alerta['texto']}", icon=":material/info:")
 
-    # --- PESTAÑA 2: ESTADO DEL SEGUIMIENTO (CORREGIDO) ---
+    # --- PESTAÑA 2: ESTADO DEL SEGUIMIENTO ---
     with tab2:
-        # Cargamos el estado actual para mostrarlo
         RUTA_SEG = Path(__file__).parent.parent / "data" / "seguimiento.json"
         if RUTA_SEG.exists():
             with open(RUTA_SEG, "r", encoding="utf-8") as f:
@@ -123,7 +139,6 @@ def mostrar_ficha(paciente, resultado_motor):
             
         estado_actual = db_seg["estados"].get(paciente["id"], "Pendiente")
         
-        # 💡 Todo va dentro del contenedor para alinear los márgenes
         with st.container(border=True):
             st.subheader(":material/assignment: Estado del Seguimiento")
             
@@ -140,7 +155,6 @@ def mostrar_ficha(paciente, resultado_motor):
 
             st.divider()
             
-            # 💡 Centramos el botón con columnas vacías a los lados
             col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
             with col_b2:
                 if st.button("Gestionar en Seguimiento", type="primary", use_container_width=True, icon=":material/arrow_forward:"):

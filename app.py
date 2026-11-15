@@ -18,7 +18,7 @@ if ruta_css.exists():
 
 # 1. Definir Páginas
 agenda = st.Page("views/1_Agenda.py", title="Agenda diaria", icon=":material/calendar_today:", default=True)
-semanal = st.Page("views/3_PanelSemanal.py", title="Panel semanal", icon=":material/date_range:")
+semanal = st.Page("views/3_PanelSemanal.py", title="Oportunidades Preventivas", icon=":material/lightbulb:")
 prioritarios = st.Page("views/4_PacientesPrioritarios.py", title="Pacientes prioritarios", icon=":material/groups:")
 ficha = st.Page("views/5_FichaPaciente.py", title="Ficha de paciente", icon=":material/person:")
 seguimiento = st.Page("views/6_Seguimiento.py", title="Seguimiento", icon=":material/checklist:")
